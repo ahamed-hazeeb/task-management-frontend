@@ -14,3 +14,9 @@ export interface CreateProjectRequest {
     description?: string;
     deadline?: string;
 }
+export interface ProjectDetail extends Project {
+    createdAt: string;
+    updatedAt: string;
+    taskCount: number;           // total number of tasks
+    tasks?: Task[];              // optional list of associated tasks
+}

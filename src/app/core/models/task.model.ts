@@ -34,3 +34,9 @@ export interface CreateTaskRequest {
     dueDate?: string;
     assignedToUserId?: number;
 }
+export interface PagedResult<T> {
+    items: T[];          // the list of items returned by the API
+    totalCount: number;  // total number of available items
+    page: number;        // current page (1-based or 0-based depending on backend)
+    pageSize: number;    // number of items per page
+}

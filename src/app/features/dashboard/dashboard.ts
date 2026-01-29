@@ -25,8 +25,8 @@ import { Team } from '../../core/models/team.model';
     NavbarComponent,
     SidebarComponent
   ],
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  templateUrl: './dashboard.html',
+  styleUrls: ['./dashboard.css']
 })
 export class DashboardComponent implements OnInit {
   teams: Team[] = [];

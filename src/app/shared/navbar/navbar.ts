@@ -5,6 +5,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
 import { AuthService } from '../../core/services/auth';
 
 @Component({
@@ -16,20 +17,25 @@ import { AuthService } from '../../core/services/auth';
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
-    MatMenuModule
+    MatMenuModule,
+    MatDividerModule
   ],
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.css']
 })
 export class NavbarComponent {
-  currentUser$ = this.authService.currentUser$;
 
   constructor(
     private authService: AuthService,
     private router: Router
   ) { }
 
+  get currentUser$() {
+    return this.authService.currentUser$;
+  }
+
   logout(): void {
     this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }
