@@ -1,29 +1,61 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
+import { RouterModule } from '@angular/router';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { AuthService } from '../../core/services/auth';
-import { User } from '../../core/models/user.model';
+import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { NavbarComponent } from '../../shared/navbar/navbar';
+import { SidebarComponent } from '../../shared/sidebar/sidebar';
+import { TeamService } from '../../core/services/team';
+import { Team } from '../../core/models/team.model';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule],
-  templateUrl: './dashboard.html',
-  styleUrls: ['./dashboard.css']
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatSidenavModule,
+    MatCardModule,
+    MatIconModule,
+    MatButtonModule,
+    MatProgressSpinnerModule,
+    NavbarComponent,
+    SidebarComponent
+  ],
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  user: User | null = null;
+  teams: Team[] = [];
+  loading = true;
 
-  constructor(private authService: AuthService) { }
+  stats = {
+    totalTeams: 0,
+    totalProjects: 0,
+    totalTasks: 0,
+    completedTasks: 0
+  };
+
+  constructor(private teamService: TeamService) { }
 
   ngOnInit(): void {
-    this.authService.currentUser$.subscribe(user => {
-      this.user = user;
-    });
+    this.loadDashboardData();
   }
 
-  logout(): void {
-    this.authService.logout();
+  loadDashboardData(): void {
+    this.teamService.getMyTeams().subscribe({
+      next: (teams) => {
+        this.teams = teams;
+        this.stats.totalTeams = teams.length;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error loading teams:', error);
+        this.loading = false;
+      }
+    });
   }
 }
